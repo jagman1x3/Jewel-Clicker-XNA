@@ -20,7 +20,7 @@ namespace JewelClicker
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         private double timer; 
-        private float frameInterval = 100f;
+        private const float frameInterval = 100f;
         private Engine engine;
         private MouseState oldState;
 
@@ -41,7 +41,7 @@ namespace JewelClicker
         {
             // TODO: Add your initialization logic here
             engine = new Engine();
-            graphics.PreferredBackBufferHeight = Engine.NUM_ROWS * (Jewel.HEIGHT + Jewel.VERTICAL_PADDING);
+            graphics.PreferredBackBufferHeight = Engine.NUM_ROWS * (Jewel.HEIGHT + Jewel.VERTICAL_PADDING) + Engine.SCORE_HEIGHT;
             graphics.PreferredBackBufferWidth = Engine.NUM_COLS * Jewel.WIDTH;
             graphics.ApplyChanges();
             base.Initialize();
@@ -58,6 +58,7 @@ namespace JewelClicker
 
             // TODO: use this.Content to load your game content here
             Jewel.LoadJewelImages(Content);
+            engine.LoadScoreFont(Content);
             engine.MakeJewels();
         }
 
@@ -109,7 +110,7 @@ namespace JewelClicker
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            engine.DrawJewels(spriteBatch);
+            engine.Draw(spriteBatch);
             base.Draw(gameTime);
         }
     }

@@ -118,7 +118,7 @@
     <Content Include="GameThumbnail.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FirstGameContent\JewelClickerContent.contentproj">
+    <ProjectReference Include="..\JewelClickerContent\JewelClickerContent.contentproj">
       <Name>JewelClickerContent</Name>
       <XnaReferenceType>Content</XnaReferenceType>
       <Project>{467D8F70-4A94-4740-97F1-B0B6EAE3C459}</Project>

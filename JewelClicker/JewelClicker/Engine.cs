@@ -20,6 +20,9 @@ namespace JewelClicker
         private const int MS_PER_FRAME = 20;
         private double timeSinceLastFrame;
 
+        public const int SCORE_HEIGHT = 50;
+        private SpriteFont scoreFont;
+
         private int score, biggestGroupSize;
         private Jewel jewelInBiggestGroup;
 
@@ -72,6 +75,11 @@ namespace JewelClicker
             }
         }
 
+        public void LoadScoreFont(ContentManager content)
+        {
+            scoreFont = content.Load<SpriteFont>("ScoreFont");
+        }
+
         private Jewel GetClickedJewel(int mouseX, int mouseY)
         {
             int x = mouseX / Jewel.WIDTH;
@@ -96,7 +104,13 @@ namespace JewelClicker
             }
         }
 
-        public void DrawJewels(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            DrawJewels(spriteBatch);
+            DrawScore(spriteBatch);
+        }
+
+        private void DrawJewels(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
             foreach (Jewel jewel in jewels)
@@ -167,6 +181,15 @@ namespace JewelClicker
                     GetGroup(right, jewelGroup);
                 }
             }
+        }
+
+        private void DrawScore(SpriteBatch spriteBatch)
+        {
+            int x = 5;
+            int y = NUM_ROWS * (Jewel.HEIGHT + Jewel.VERTICAL_PADDING) + 10;
+            spriteBatch.Begin();
+            spriteBatch.DrawString(scoreFont, "Score: " + score, new Vector2(x, y), Color.Yellow);
+            spriteBatch.End();
         }
     }
 }
