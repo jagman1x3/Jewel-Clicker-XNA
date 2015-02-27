@@ -23,6 +23,7 @@ namespace JewelClicker
         private const float frameInterval = 100f;
         private Engine engine;
         private MouseState oldState;
+        private Menu menu;
 
         public Game1()
         {
@@ -41,6 +42,7 @@ namespace JewelClicker
         {
             // TODO: Add your initialization logic here
             engine = new Engine();
+            menu = new Menu(1);
             graphics.PreferredBackBufferHeight = Engine.NUM_ROWS * (Jewel.HEIGHT + Jewel.VERTICAL_PADDING) + Engine.SCORE_HEIGHT;
             graphics.PreferredBackBufferWidth = Engine.NUM_COLS * Jewel.WIDTH;
             graphics.ApplyChanges();
@@ -60,6 +62,7 @@ namespace JewelClicker
             Jewel.LoadJewelImages(Content);
             engine.LoadScoreFont(Content);
             engine.MakeJewels();
+            menu.LoadButtons(Content, graphics);
         }
 
         /// <summary>
@@ -70,6 +73,7 @@ namespace JewelClicker
         {
             // TODO: Unload any non ContentManager content here
             Content.Unload();
+            menu.UnloadButtons();
         }
 
         /// <summary>
