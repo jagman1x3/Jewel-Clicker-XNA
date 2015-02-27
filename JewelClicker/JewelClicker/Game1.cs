@@ -42,7 +42,8 @@ namespace JewelClicker
         {
             // TODO: Add your initialization logic here
             engine = new Engine();
-            menu = new Menu(1);
+            menu = new Menu();
+            menu.addButton("Start!", Color.Yellow, 100, 100, 200, 100);
             graphics.PreferredBackBufferHeight = Engine.NUM_ROWS * (Jewel.HEIGHT + Jewel.VERTICAL_PADDING) + Engine.SCORE_HEIGHT;
             graphics.PreferredBackBufferWidth = Engine.NUM_COLS * Jewel.WIDTH;
             graphics.ApplyChanges();
@@ -114,7 +115,15 @@ namespace JewelClicker
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            engine.Draw(spriteBatch);
+            if (menu != null)
+            {
+                menu.DrawButtons(spriteBatch);
+            }
+            else
+            {
+                engine.Draw(spriteBatch);
+            }
+            
             base.Draw(gameTime);
         }
     }
