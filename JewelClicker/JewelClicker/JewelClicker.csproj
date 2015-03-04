@@ -107,6 +107,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ButtonDelegate.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Jewel.cs" />
     <Compile Include="Menu.cs" />

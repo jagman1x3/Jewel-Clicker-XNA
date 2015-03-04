@@ -25,6 +25,13 @@ namespace JewelClicker
         private MouseState oldState;
         private Menu menu;
 
+        enum GameState
+        {
+            Menu,
+            Playing
+        }
+        GameState gameState;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -41,9 +48,10 @@ namespace JewelClicker
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            engine = new Engine();
+            gameState = GameState.Menu;
             menu = new Menu();
-            menu.addButton("Start!", Color.Yellow, 100, 100, 200, 100);
+            menu.addButton("Start!", Color.Yellow, 100, 100, 200, 100, StartGame);
+            engine = new Engine();
             graphics.PreferredBackBufferHeight = Engine.NUM_ROWS * (Jewel.HEIGHT + Jewel.VERTICAL_PADDING) + Engine.SCORE_HEIGHT;
             graphics.PreferredBackBufferWidth = Engine.NUM_COLS * Jewel.WIDTH;
             graphics.ApplyChanges();
@@ -62,7 +70,6 @@ namespace JewelClicker
             // TODO: use this.Content to load your game content here
             Jewel.LoadJewelImages(Content);
             engine.LoadScoreFont(Content);
-            engine.MakeJewels();
             menu.LoadButtons(Content, graphics);
         }
 
@@ -89,20 +96,34 @@ namespace JewelClicker
                 Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
 
-            // TODO: Add your update logic here
-            timer += gameTime.ElapsedGameTime.TotalMilliseconds;
-            if (timer > frameInterval)
-            {
-                timer = 0; 
-                engine.UpdateJewels(gameTime);
-                base.Update(gameTime);
-            }
-            
             MouseState newState = Mouse.GetState();
-            if (newState.LeftButton == ButtonState.Released && oldState.LeftButton == ButtonState.Pressed) //mouse up
+
+            if (gameState == GameState.Menu)
             {
-                engine.OnMouseUp(newState);
+                if (newState.LeftButton == ButtonState.Released && oldState.LeftButton == ButtonState.Pressed)
+                {
+                    menu.onMouseUp(newState);
+                }
             }
+
+            else if (gameState == GameState.Playing)
+            {
+                timer += gameTime.ElapsedGameTime.TotalMilliseconds;
+                if (timer > frameInterval)
+                {
+                    timer = 0; 
+                    engine.UpdateJewels(gameTime);
+                    base.Update(gameTime);
+                }
+            
+                
+                if (newState.LeftButton == ButtonState.Released && oldState.LeftButton == ButtonState.Pressed) //mouse up
+                {
+                    engine.OnMouseUp(newState);
+                }
+                
+            }
+
             oldState = newState;
         }
 
@@ -115,16 +136,22 @@ namespace JewelClicker
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            if (menu != null)
+            if (gameState == GameState.Menu)
             {
                 menu.DrawButtons(spriteBatch);
             }
-            else
+            else if (gameState == GameState.Playing)
             {
                 engine.Draw(spriteBatch);
             }
             
             base.Draw(gameTime);
+        }
+
+        private void StartGame()
+        {
+            gameState = GameState.Playing;
+            engine.MakeJewels();
         }
     }
 }

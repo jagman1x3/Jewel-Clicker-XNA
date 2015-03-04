@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,9 +19,9 @@ namespace JewelClicker
             buttons = new ArrayList();
         }
 
-        public void addButton(String text, Color color, int x, int y, int width, int height)
+        public void addButton(String text, Color color, int x, int y, int width, int height, ButtonDelegate onClick)
         {
-            MenuButton b = new MenuButton(text, color, x, y, width, height);
+            MenuButton b = new MenuButton(text, color, x, y, width, height, onClick);
             buttons.Add(b);
         }
             
@@ -47,6 +48,21 @@ namespace JewelClicker
                 b.Draw(sb);
             }
         }
+
+        public void onMouseUp(MouseState mouseState)
+        {
+            foreach (MenuButton button in buttons){
+                if (buttonClicked(button, mouseState)){
+                    button.onClick();
+                }
+            }
+        }
+
+        private bool buttonClicked(MenuButton b, MouseState ms)
+        {
+            Rectangle buttonArea = new Rectangle(b.x, b.y, b.width, b.height);
+            return buttonArea.Contains(ms.X, ms.Y);
+        }
      
     }
 
@@ -55,11 +71,12 @@ namespace JewelClicker
         private static Texture2D blackTexture;
         private String text;
         private Color color, clickedColor;
-        private int x, y, width, height, fontSize;
+        public readonly int x, y, width, height, fontSize;
         private Texture2D texture, clickedTexture;
         private static SpriteFont font;
+        public ButtonDelegate onClick;
 
-        public MenuButton(String t, Color c, int x, int y, int w, int h)
+        public MenuButton(String t, Color c, int x, int y, int w, int h, ButtonDelegate onClick)
         {
             text = t;
             color = c;
@@ -67,6 +84,7 @@ namespace JewelClicker
             height = h;
             this.x = x;
             this.y = y;
+            this.onClick = onClick;
         }
 
         public void LoadContent(ContentManager content, GraphicsDeviceManager graphics)
@@ -103,6 +121,9 @@ namespace JewelClicker
             sb.DrawString(font, text, new Vector2(textX, textY), Color.Black);
             sb.End();
         }
+
+        
+
     }
 
 }
