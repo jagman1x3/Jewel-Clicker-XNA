@@ -106,28 +106,30 @@ namespace JewelClicker
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            DrawJewels(spriteBatch);
+            //DrawJewels(spriteBatch);
             DrawScore(spriteBatch);
         }
 
-        private void DrawJewels(SpriteBatch spriteBatch)
-        {
-            spriteBatch.Begin();
-            foreach (Jewel jewel in jewels)
-            {
-                jewel.Draw(spriteBatch);
-            }
-            spriteBatch.End();
-        }
+        //private void DrawJewels(SpriteBatch spriteBatch)
+        //{
+        //    foreach (Jewel jewel in jewels)
+        //    {
+        //        jewel.Draw(spriteBatch);
+        //    }
+        //}
 
-        public void MakeJewels()
+        public void MakeJewels(Game game)
         {
             for (int i = 0; i < NUM_ROWS; i++)
             {
                 for (int j = 0; j < NUM_COLS; j++)
                 {
-                    Jewel jewel = new Jewel(i, j);
+                    Jewel jewel = new Jewel(game);
+                    jewel.x = i;
+                    jewel.y = j;
+                    jewel.setOffset();
                     jewels[i, j] = jewel;
+                    game.Components.Add(jewel);
                 }
             }
         }

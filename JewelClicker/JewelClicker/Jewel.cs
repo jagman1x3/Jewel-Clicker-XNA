@@ -8,7 +8,7 @@ using System.Diagnostics;
 
 namespace JewelClicker
 {
-    class Jewel
+    class Jewel : DrawableGameComponent
     {
         public const int HEIGHT = 32;
         public const int WIDTH = 32;
@@ -27,19 +27,24 @@ namespace JewelClicker
         public String color;
         public bool isSpinning, isInBiggestGroup, isSolid, toDelete;
 
-        public Jewel(int x, int y)
+        private SpriteBatch spriteBatch;
+
+        public Jewel(Game game) : base(game)
         {
             this.frameIndex = 0;
             this.color = RandomColor();
-            this.x = x;
-            this.y = y;
             this.isSpinning = true;
             this.isInBiggestGroup = false;
             this.isSolid = false;
             this.toDelete = false;
-            this.xOffset = WIDTH  * this.x;
-	        this.yOffset = (HEIGHT + VERTICAL_PADDING) * this.y;
             this.image = jewelImages[color];
+            this.spriteBatch = (SpriteBatch)game.Services.GetService(typeof(SpriteBatch));
+        }
+
+        public void setOffset()
+        {
+            this.xOffset = WIDTH * this.x;
+            this.yOffset = (HEIGHT + VERTICAL_PADDING) * this.y;
         }
 
         public static void LoadJewelImages(ContentManager content)
@@ -56,13 +61,15 @@ namespace JewelClicker
         }
 
 
-        public void Draw(SpriteBatch spriteBatch)
+        public override void Draw(GameTime gameTime)
         {
             Rectangle spriteRect = new Rectangle(frameIndex * WIDTH, 0, WIDTH, HEIGHT);
+            spriteBatch.Begin();
             spriteBatch.Draw(image, new Vector2(xOffset, yOffset), spriteRect, Color.White);
+            spriteBatch.End();
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             if (isSpinning)
             {

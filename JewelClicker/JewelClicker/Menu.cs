@@ -5,18 +5,21 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
 namespace JewelClicker
 {
-    class Menu
+    class Menu : DrawableGameComponent
     {
         private ArrayList buttons;
+        private SpriteBatch spriteBatch;
 
-        public Menu()
+        public Menu(Game game) : base(game)
         {
             buttons = new ArrayList();
+            spriteBatch = (SpriteBatch)game.Services.GetService(typeof(SpriteBatch));
         }
 
         public void addButton(String text, Color color, Color clickedColor, int x, int y, int width, int height, ButtonDelegate onClick)
@@ -41,12 +44,18 @@ namespace JewelClicker
             }
         }
 
-        public void DrawButtons(SpriteBatch sb)
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+        }
+
+        public override void Draw(GameTime gameTime)
         {
             foreach (MenuButton b in buttons)
             {
-                b.Draw(sb);
+                b.Draw(spriteBatch);
             }
+            base.Draw(gameTime);
         }
 
         public void onMouseUp(MouseState mouseState)

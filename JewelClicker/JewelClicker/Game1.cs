@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System.Diagnostics;
 
 namespace JewelClicker
 {
@@ -49,9 +50,8 @@ namespace JewelClicker
         {
             // TODO: Add your initialization logic here
             gameState = GameState.Menu;
-            menu = new Menu();
-            menu.addButton("Start!", Color.Yellow, Color.Red, 100, 100, 200, 100, StartGame);
-            engine = new Engine();
+            
+            
             graphics.PreferredBackBufferHeight = Engine.NUM_ROWS * (Jewel.HEIGHT + Jewel.VERTICAL_PADDING) + Engine.SCORE_HEIGHT;
             graphics.PreferredBackBufferWidth = Engine.NUM_COLS * Jewel.WIDTH;
             graphics.ApplyChanges();
@@ -66,11 +66,15 @@ namespace JewelClicker
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            Services.AddService(typeof(SpriteBatch), spriteBatch);
 
-            // TODO: use this.Content to load your game content here
+            menu = new Menu(this);
+            menu.addButton("Start!", Color.Yellow, Color.Red, 100, 100, 200, 100, StartGame);
+            engine = new Engine();
             Jewel.LoadJewelImages(Content);
             engine.LoadScoreFont(Content);
             menu.LoadButtons(Content, graphics);
+            Components.Add(menu);
         }
 
         /// <summary>
@@ -116,7 +120,7 @@ namespace JewelClicker
                 if (timer > frameInterval)
                 {
                     timer = 0; 
-                    engine.UpdateJewels(gameTime);
+                    //engine.UpdateJewels(gameTime);
                     base.Update(gameTime);
                 }
             
@@ -138,24 +142,14 @@ namespace JewelClicker
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            // TODO: Add your drawing code here
-            if (gameState == GameState.Menu)
-            {
-                menu.DrawButtons(spriteBatch);
-            }
-            else if (gameState == GameState.Playing)
-            {
-                engine.Draw(spriteBatch);
-            }
-            
             base.Draw(gameTime);
         }
 
         private void StartGame()
         {
             gameState = GameState.Playing;
-            engine.MakeJewels();
+            menu.Visible = false;
+            engine.MakeJewels(this);
         }
     }
 }
