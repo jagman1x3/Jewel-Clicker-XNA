@@ -19,9 +19,9 @@ namespace JewelClicker
             buttons = new ArrayList();
         }
 
-        public void addButton(String text, Color color, int x, int y, int width, int height, ButtonDelegate onClick)
+        public void addButton(String text, Color color, Color clickedColor, int x, int y, int width, int height, ButtonDelegate onClick)
         {
-            MenuButton b = new MenuButton(text, color, x, y, width, height, onClick);
+            MenuButton b = new MenuButton(text, color, clickedColor, x, y, width, height, onClick);
             buttons.Add(b);
         }
             
@@ -53,6 +53,7 @@ namespace JewelClicker
         {
             foreach (MenuButton button in buttons){
                 if (buttonClicked(button, mouseState)){
+                    button.clicked = true;
                     button.onClick();
                 }
             }
@@ -71,15 +72,17 @@ namespace JewelClicker
         private static Texture2D blackTexture;
         private String text;
         private Color color, clickedColor;
-        public readonly int x, y, width, height, fontSize;
+        public readonly int x, y, width, height;
         private Texture2D texture, clickedTexture;
         private static SpriteFont font;
         public ButtonDelegate onClick;
+        public bool clicked;
 
-        public MenuButton(String t, Color c, int x, int y, int w, int h, ButtonDelegate onClick)
+        public MenuButton(String t, Color color, Color clickedColor, int x, int y, int w, int h, ButtonDelegate onClick)
         {
             text = t;
-            color = c;
+            this.color = color;
+            this.clickedColor = clickedColor;
             width = w;
             height = h;
             this.x = x;
@@ -117,12 +120,10 @@ namespace JewelClicker
             Vector2 textDims = font.MeasureString(text);
             float textX = x + (width / 2) - (textDims.X / 2);
             float textY = y + (height / 2) - (textDims.Y / 2);
-            sb.Draw(texture, new Rectangle(x, y, width, height), Color.White);
+            sb.Draw(clicked ? clickedTexture : texture, new Rectangle(x, y, width, height), Color.White);
             sb.DrawString(font, text, new Vector2(textX, textY), Color.Black);
             sb.End();
         }
-
-        
 
     }
 

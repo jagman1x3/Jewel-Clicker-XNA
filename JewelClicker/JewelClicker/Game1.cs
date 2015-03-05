@@ -50,7 +50,7 @@ namespace JewelClicker
             // TODO: Add your initialization logic here
             gameState = GameState.Menu;
             menu = new Menu();
-            menu.addButton("Start!", Color.Yellow, 100, 100, 200, 100, StartGame);
+            menu.addButton("Start!", Color.Yellow, Color.Red, 100, 100, 200, 100, StartGame);
             engine = new Engine();
             graphics.PreferredBackBufferHeight = Engine.NUM_ROWS * (Jewel.HEIGHT + Jewel.VERTICAL_PADDING) + Engine.SCORE_HEIGHT;
             graphics.PreferredBackBufferWidth = Engine.NUM_COLS * Jewel.WIDTH;
@@ -100,7 +100,11 @@ namespace JewelClicker
 
             if (gameState == GameState.Menu)
             {
-                if (newState.LeftButton == ButtonState.Released && oldState.LeftButton == ButtonState.Pressed)
+                if (newState.LeftButton == ButtonState.Pressed && oldState.LeftButton == ButtonState.Released)
+                {
+                    //menu.onMouseDown(newState);
+                }
+                else if (newState.LeftButton == ButtonState.Released && oldState.LeftButton == ButtonState.Pressed)
                 {
                     menu.onMouseUp(newState);
                 }
